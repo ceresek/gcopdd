@@ -18,6 +18,13 @@ To use this project, you have to have these tools installed:
 * Java 11
 * GNU Make
 * Python 2.7
+* Gradle 5.0.0 or newer
+* Ant
+
+## Configuration
+
+You can turn individual components on/off by modifying file `blood/config`.
+Lines starting with hash character (`#`) are comments and will be ignored.
 
 ## Running Java with instrumented Graal compiler
 
