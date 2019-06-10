@@ -1,12 +1,12 @@
 from itertools import takewhile
-from viewers_common import *
+from viewers.common import *
 
 
 def html_class(desc):
 	yield '<span style="color: gray">%s</span>.%s' % (desc.package, desc.simplename)
 
 
-def view(lines_n):
+def view(lines_n, *_):
 	lines = map(str.strip, lines_n) # remove '\n' characters
 	classes = read_classes(lines)
 
