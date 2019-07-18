@@ -9,6 +9,10 @@ graal.instrumented.jar
 *.class
 graal_dumps/
 dumps/
+graal/
+mx/
+PLuG/
 scratch/
 __pycache__
-
+dump-browser.conf
+dump-browser.pid

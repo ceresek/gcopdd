@@ -1,9 +1,9 @@
 language: java
 jdk: openjdk11
-script: make build
+script: |
+  git clone --depth=1 https://github.com/oracle/graal.git
+  make build
+  ./vm tests/Fibonacci.java
 cache:
-  directories:
-    - graal/
-    - mx/
-    - PLuG/
-    - $HOME/.gradle
+  - mx/
+  - PLuG/

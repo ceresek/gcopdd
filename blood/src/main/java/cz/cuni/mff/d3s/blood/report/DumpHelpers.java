@@ -19,9 +19,9 @@ public final class DumpHelpers {
      */
     public static final String[] SUFFIXES = {".java", ".class", ".jar"};
     /**
-     * Name of the dumps directory. Relative to PWD. Without trailing slash.
+     * Default name of the dumps directory. Relative to PWD. Without trailing slash.
      */
-    public static final String DUMPS_DIR_NAME = "dumps";
+    public static final String DEFAULT_DUMPS_DIR_NAME = "dumps";
     private static final boolean ENABLE_DUMP_COMPRESSION = true;
     private static File cachedReportDir = null;
 
@@ -64,15 +64,13 @@ public final class DumpHelpers {
                 testName.append(arg);
                 testName.append('_');
             }
-        } catch (IOException ex) {
-            System.err.println("Error reading /proc/self/cmdline.");
-            System.err.println("Note that this is UN*X-specific.");
-            System.err.println("Falling back to \"unknown\" (sic).");
-            return "unknown";
+            testName.deleteCharAt(testName.length() - 1); // delete the last underscore ("_")
+        } catch (IOException | StringIndexOutOfBoundsException ex) {
+            System.err.println("Error reading /proc/self/cmdline. Falling back to \"unknown\" (sic).");
+            testName.replace(0, testName.length(), "unknown");
         }
 
-        testName.deleteCharAt(testName.length() - 1); // delete the last underscore ("_")
-        return testName.toString();
+        return String.format(System.getProperty("blood.rename", "%s"), testName);
     }
 
     /**
@@ -87,12 +85,11 @@ public final class DumpHelpers {
     }
 
     /**
-     * Constructs name of the file that is to be put in the dumps directory.
+     * Constructs name of the subdirectory that is to be put in the dumps directory.
      *
-     * @param type type of the dumped data, used as suffix
-     * @return the name without any directories
+     * @return the name of the directory without any parent directories or slashes
      */
-    public static final String getReportDirBaseName(String type) {
+    public static final String getReportDirBaseName() {
         return getDateString() + "." + getTestName();
     }
 
@@ -101,8 +98,8 @@ public final class DumpHelpers {
             return cachedReportDir;
         }
 
-        File dumpDir = new File(DUMPS_DIR_NAME);
-        cachedReportDir = new File(dumpDir, getReportDirBaseName(DUMPS_DIR_NAME));
+        File dumpDir = new File(System.getProperty("blood.dumpsdir", DEFAULT_DUMPS_DIR_NAME));
+        cachedReportDir = new File(dumpDir, getReportDirBaseName());
         cachedReportDir.mkdirs();
         return cachedReportDir;
     }
